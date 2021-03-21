@@ -1,0 +1,16 @@
+@keyframes goDown {
+  0% {
+    transform: translateY(-50px);
+  }
+}
+
+@keyframes fadeRight {
+  0% {
+    visibility: visible;
+  }
+
+  100% {
+    transform: translateY(100px);
+    visibility: hidden;
+  }
+}

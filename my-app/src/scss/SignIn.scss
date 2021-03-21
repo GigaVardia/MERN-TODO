@@ -1,0 +1,99 @@
+.signIn {
+  &-outer {
+    width: 100%;
+    height: 100%;
+
+    animation: goDown 1s;
+  }
+
+  &-inner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+  }
+
+  &-form {
+    text-align: center;
+    flex-basis: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &-title {
+      color: darken($color-primary, 10%);
+      font-size: $fs-h1;
+      font-weight: $fw-600;
+      user-select: none;
+      margin-bottom: 30px;
+    }
+
+    &-label {
+      &-input {
+        font-size: $fs-xl;
+        color: $color-primary;
+        padding: 10px 10px;
+        border: 2px solid $color-primary;
+        border-radius: $border-radius;
+        max-width: 300px;
+        margin-bottom: 20px;
+
+
+        &:focus {
+          transition: $transition * 2;
+          border-radius: $border-radius * 2.5;
+          padding: 10px 15px;
+          outline: none;
+        }
+        &::placeholder {
+          color: $color-primary;
+        }
+        &--failed {
+          border-color: #e84118 !important;
+        }
+      }
+    }
+
+    &-btn {
+      color: #f5f6fa;
+      font-size: $fs-lg;
+      font-weight: $fw-500;
+      background-color: $color-primary;
+      width: 170px;
+      border: none;
+      border-radius: $border-radius;
+      padding: 15px 10px;
+      margin-bottom: 20px;
+
+      &:hover {
+        transition: $transition;
+
+        opacity: .9;
+        cursor: pointer;
+      }
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    &-signUp {
+      font-size: $fs-md;
+      color: $color-primary;
+      cursor: pointer;
+      background-color: transparent;
+      border: none;
+
+      &:hover {
+        transition: $transition;
+        color: darken($color-primary, 10%);
+      }
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+}
