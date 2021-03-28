@@ -1,11 +1,11 @@
-import React from 'react';
-import { useSelector} from "react-redux";
+import React, {FC} from 'react';
+import {useTypedSelector} from "../Hooks/useTypedSelector";
 import SignIn from "./SignIn";
 import SignUpPage from "./SignUpPage";
 import LoggedUserPage from "./LoggedUserPage";
 
-const MainPage = () => {
-    const {isUserLogged, signUpClicked} = useSelector(state => state.mainPageInfo);
+const MainPage: FC = () => {
+    const {isUserLogged, signUpClicked} = useTypedSelector(state => state.mainPageInfo)
 
     return (
         <main className="main main-outer">
