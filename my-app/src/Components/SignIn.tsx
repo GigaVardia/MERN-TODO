@@ -1,36 +1,32 @@
-import React, {useEffect} from 'react';
-import {useDispatch, useSelector} from "react-redux";
-import {addLoginEmail, addLoginPassword} from "../Store/userLoginReducers";
+import React, {FC, useEffect} from 'react';
+import {useDispatch} from "react-redux";
 import {useHttp} from "../Hooks/http.hook";
-import {
-    setLoginFailedFalse,
-    setLoginFailedTrue,
-    setSignUpClickedTrue,
-    setUserLoginActive
-} from "../Store/mainPageReducer";
-import {addNewUserData} from "../Store/userDataReducer";
+import {useTypedSelector} from "../Hooks/useTypedSelector";
 
-const SignIn = () => {
+const SignIn:FC = () => {
     const {request} = useHttp();
     const dispatch = useDispatch();
-    const loginState = useSelector(state => state.userLogin);
-    const {loginFailed} = useSelector(state => state.mainPageInfo);
+    const loginState = useTypedSelector(state => state.userLogin)
+    const {loginFailed} = useTypedSelector(state => state.mainPageInfo)
 
-    const handleEmailInput = (event) => {
-        dispatch(addLoginEmail(event.target.value));
+    const handleEmailInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+        dispatch({type: "ADD_EMAIL", payload: event.target.value})
     }
 
-    const handlePasswordInput = (event) => {
-        dispatch(addLoginPassword(event.target.value));
+    const handlePasswordInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+        dispatch({type: "ADD_PASSWORD", payload: event.target.value})
     }
 
-    const handleSignInBtn =  async (event) => {
+    const handleSignInBtn =  async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.preventDefault();
 
         if (!loginState.email || !loginState.password) {
-            dispatch(setLoginFailedTrue())
+            dispatch({type: "SET_LOGIN_FAILED", payload: true})
             return -1
         }
+
+        console.log(loginState)
+        console.log(loginFailed)
 
         try {
             const data = await request('/api/auth/login', 'POST', {...loginState});
@@ -41,18 +37,18 @@ const SignIn = () => {
                 data: data.payload.data,
                 id: data.payload._id
             }
-            dispatch(addNewUserData(user))
-            dispatch(setUserLoginActive())
-            dispatch(setLoginFailedFalse())
+            dispatch({type: "ADD_NEW_USER_DATA", payload: {user}})
+            dispatch({type: "SET_USER_LOGIN", payload: true})
+            dispatch({type: "SET_LOGIN_FAILED", payload: false})
         } catch (e) {
-            dispatch(setLoginFailedTrue())
+            dispatch({type: "SET_LOGIN_FAILED", payload: true})
             console.log(e, "Error while login fetch...")
         }
     }
 
-    const handleSignUp = (e) => {
+    const handleSignUp = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
-        dispatch(setSignUpClickedTrue())
+        dispatch({type: "SET_SIGN_UP_CLICKED", payload: true})
     }
 
     useEffect(() => {

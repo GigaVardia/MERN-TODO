@@ -1,18 +1,17 @@
-import React, {useState, useEffect} from 'react';
-import {useDispatch, useSelector} from "react-redux";
-import {addRegisterEmail, addRegisterName, addRegisterPassword, addRegisterSurname} from "../Store/userRegisterReducer";
+import React, {useState, useEffect, FC} from 'react';
+import {useDispatch} from "react-redux";
+import {useTypedSelector} from "../Hooks/useTypedSelector";
 import {useHttp} from "../Hooks/http.hook";
-import {setSignUpClickedFalse} from "../Store/mainPageReducer";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
 const BackIco = <FontAwesomeIcon icon={faArrowLeft} />
 
-const SignUpPage = () => {
+const SignUpPage: FC = () => {
     const {request} = useHttp();
     const dispatch = useDispatch();
-    const userState = useSelector(state => state.userRegister);
+    const userState = useTypedSelector(state => state.userRegister)
     const [registerFailed, setRegisterFailed] = useState(false);
 
     useEffect(() => {
@@ -22,23 +21,23 @@ const SignUpPage = () => {
         }
     }, [registerFailed])
 
-    const handleNameInput = (event) => {
-        dispatch(addRegisterName(event.target.value));
+    const handleNameInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+        dispatch({type: "ADD_NAME", payload: event.target.value})
     }
 
-    const handleSurnameInput = (event) => {
-        dispatch(addRegisterSurname(event.target.value));
+    const handleSurnameInput = (event:React.ChangeEvent<HTMLInputElement>) => {
+        dispatch({type: "ADD_SURNAME", payload: event.target.value})
     }
 
-    const handleLoginInput = (event) => {
-        dispatch(addRegisterEmail(event.target.value))
+    const handleLoginInput = (event:React.ChangeEvent<HTMLInputElement>) => {
+        dispatch({type: "ADD_EMAIL", payload: event.target.value})
     }
 
-    const handlePasswordInput = (event) => {
-        dispatch(addRegisterPassword(event.target.value));
+    const handlePasswordInput = (event:React.ChangeEvent<HTMLInputElement>) => {
+        dispatch({type: "ADD_PASSWORD", payload: event.target.value})
     }
 
-    const handleRegisterSubmit = async (event) => {
+    const handleRegisterSubmit = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.preventDefault();
 
         if (!userState.name || !userState.surname || !userState.email || !userState.password) {
@@ -49,7 +48,7 @@ const SignUpPage = () => {
         try {
             const data = await request('/api/auth/register', 'POST', {...userState});
             console.log(data);
-            dispatch(setSignUpClickedFalse());
+            dispatch({type: "SET_SIGNED_UP_CLICKED", payload: false})
         } catch (e) {
             setRegisterFailed(true);
             console.log(e, "Error, while register fetch...");
@@ -57,7 +56,7 @@ const SignUpPage = () => {
     }
 
     const handleBackToMainPage = () => {
-        dispatch(setSignUpClickedFalse())
+        dispatch({type: "SET_SIGN_UP_CLICKED", payload: false})
     }
 
     return (

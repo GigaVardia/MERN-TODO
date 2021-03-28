@@ -1,29 +1,32 @@
 import React from 'react';
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {getDate, months, getWeekDay} from "../dateFunctionts";
-import {addNewTodo, changeTodo, deleteTodo} from "../Store/userDataReducer";
+import {useHttp} from "../Hooks/http.hook";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faPlus, faMinusCircle, faArrowLeft} from '@fortawesome/free-solid-svg-icons'
-import {setUserLoginInActive} from "../Store/mainPageReducer";
-import {useHttp} from "../Hooks/http.hook";
+import {useTypedSelector} from "../Hooks/useTypedSelector";
 
 const addTaskIco = <FontAwesomeIcon icon={faPlus} />
 const deleteTaskIco = <FontAwesomeIcon icon={faMinusCircle}/>
 const BackIco = <FontAwesomeIcon icon={faArrowLeft} />
 
-const TaskItem = ({task, index}) => {
+type TaskItemProps = {
+    task: string,
+    index: number
+}
+
+const TaskItem = ({task, index}: TaskItemProps) => {
     const dispatch = useDispatch();
 
-    const handleAddTaskChange = (event) => {
-        const element = event.target;
-        const index = element.id.match(/\d+/g).map(Number);
-
-        dispatch(changeTodo({index, task: element.value}))
+    const handleAddTaskChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const element: HTMLInputElement = event.target;
+        if (!element) return
+        dispatch({type: "CHANGE_TODO", payload: {index, task: element.value}})
     }
 
     const handleDeleteTask = () => {
-        dispatch(deleteTodo({index}))
+        dispatch({type: "DELETE_TODO", payload: {index}})
     }
 
     return (
@@ -45,11 +48,11 @@ const TaskItem = ({task, index}) => {
 const LoggedUserPage = () => {
     const {request} = useHttp();
     const dispatch = useDispatch();
-    const userData = useSelector(state => state.userData);
+    const userData = useTypedSelector(state => state.userData)
     const date = getDate();
 
     const addNewTask = () => {
-        dispatch(addNewTodo({task: "New Todo"}))
+        dispatch({type: "ADD_NEW_TODO", payload: {task: "New Todo"}})
     }
 
     const logOut = async () => {
@@ -57,10 +60,10 @@ const LoggedUserPage = () => {
             const data = await request('/api/saveuser', 'PATCH', {email: userData.email, data: userData.data})
             console.log(data)
         } catch (e) {
-            dispatch(setUserLoginInActive())
+            dispatch({type: "SET_USER_LOGIN", payload: false})
             console.log("Error while fetching saving data...")
         }
-        dispatch(setUserLoginInActive())
+        dispatch({type: "SET_USER_LOGIN", payload: false})
     }
 
     return (
