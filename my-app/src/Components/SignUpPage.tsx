@@ -5,6 +5,7 @@ import {useHttp} from "../Hooks/http.hook";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { useAlert } from './../Hooks/useAlert';
 
 const BackIco = <FontAwesomeIcon icon={faArrowLeft} />
 
@@ -13,6 +14,7 @@ const SignUpPage: FC = () => {
     const dispatch = useDispatch();
     const userState = useTypedSelector(state => state.userRegister)
     const [registerFailed, setRegisterFailed] = useState(false);
+    const SweetAlert = useAlert()
 
     useEffect(() => {
         if (registerFailed) {
@@ -50,6 +52,9 @@ const SignUpPage: FC = () => {
             console.log(data);
             dispatch({type: "SET_SIGNED_UP_CLICKED", payload: false})
         } catch (e) {
+            SweetAlert.fire({
+                title: <p>Please, enter valid data!</p>
+            })
             setRegisterFailed(true);
             console.log(e, "Error, while register fetch...");
         }

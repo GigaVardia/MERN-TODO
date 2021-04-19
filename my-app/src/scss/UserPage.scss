@@ -45,59 +45,68 @@
   }
 
   &-tasks {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    overflow-y: auto;
     width: 100%;
+    overflow-y: auto;
 
-    &__item {
+    &-inner {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      margin: 10px 0;
-      max-width: 600px;
+      justify-content: center;
+      padding: 20px;
       width: 100%;
-      animation: goDown .5s;
-      position: relative;
 
-      &-delete {
-        position: absolute;
-        right: 10px;
-        cursor: pointer;
-        font-size: $fs-xl;
-        color: #e84118;
-        transition: $transition;
-
-        &:hover {
-          transform: scale(1.1);
-        }
-      }
-
-      &-input {
-        color: $color-primary;
-        font-size: $fs-xl;
-        font-weight: $fw-500;
-        padding: 10px 50px 10px 10px;
-        height: auto;
+      &__item {
+        display: flex;
+        align-items: center;
+        margin: 10px 0;
+        max-width: 600px;
         width: 100%;
-        border: 3px solid $color-primary;
-        border-radius: 10px;
-        transition: $transition;
-
-        &:focus {
-          outline: none;
-          transform: scale(1.01);
+        animation: goDown .5s;
+        position: relative;
+  
+        &-delete {
+          position: absolute;
+          right: 10px;
+          cursor: pointer;
+          font-size: $fs-xl;
+          color: #e84118;
+          transition: $transition;
+  
+          &:hover {
+            transform: scale(1.1);
+          }
         }
-
-        &[disabled] {
-          background-color: #f5f6fa;
+  
+        &-input {
+          color: $color-primary;
+          font-size: $fs-xl;
+          font-weight: $fw-500;
+          padding: 10px 50px 10px 10px;
+          height: auto;
+          width: 100%;
+          border: 3px solid $color-primary;
+          border-radius: 10px;
+          transition: $transition;
+  
+          &:focus {
+            outline: none;
+            transform: scale(1.01);
+          }
+  
+          &[disabled] {
+            background-color: #f5f6fa;
+          }
         }
       }
     }
+  }
 
-    &__newTask {
+  &__actions {
+    display: flex;
+    margin-bottom: 1rem;
+    &-item {
+      margin: 0 1rem;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -110,7 +119,7 @@
       color: #f5f6fa;
       cursor: pointer;
       transition: $transition;
-
+  
       &:hover {
         background-color: #f5f6fa;
         color: $color-primary;

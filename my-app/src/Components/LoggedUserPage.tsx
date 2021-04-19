@@ -30,15 +30,15 @@ const TaskItem = ({task, index}: TaskItemProps) => {
     }
 
     return (
-        <label className="userPage-tasks__item">
+        <label className="userPage-tasks-inner__item">
             <input
-                className="userPage-tasks__item-input"
+                className="userPage-tasks-inner__item-input"
                 id={`task${index}`}
                 type="text"
                 onChange={handleAddTaskChange}
                 value={task}
             />
-            <div onClick={handleDeleteTask} className="userPage-tasks__item-delete">
+            <div onClick={handleDeleteTask} className="userPage-tasks-inner__item-delete">
                 {deleteTaskIco}
             </div>
         </label>
@@ -55,15 +55,20 @@ const LoggedUserPage = () => {
         dispatch({type: "ADD_NEW_TODO", payload: {task: "New Todo"}})
     }
 
+    const clearTasks = () => {
+        dispatch({type: "DELETE_ALL"})
+    }
+
     const logOut = async () => {
         try {
             const data = await request('/api/saveuser', 'PATCH', {email: userData.email, data: userData.data})
             console.log(data)
         } catch (e) {
             dispatch({type: "SET_USER_LOGIN", payload: false})
-            console.log("Error while fetching saving data...")
+            console.log(e, "Error while fetching saving data...")
         }
         dispatch({type: "SET_USER_LOGIN", payload: false})
+        dispatch({type: "INITIALIZE"})
     }
 
     return (
@@ -79,29 +84,36 @@ const LoggedUserPage = () => {
                     <span className="bolder">{getWeekDay()}</span>,&nbsp;
                     {date.day} {months[date.month + 1]}
                 </div>
-                <div className="userPage-tasks">
-                    {
-                        userData.data?.length > 0 ? userData.data.map(
-                            (item, index) =>
-                                <TaskItem
-                                    key={index}
-                                    index={index}
-                                    task={item.task}
-                                />
-                        ) :
-                            <label className="userPage-tasks__item">
-                                <input
-                                    placeholder="No Tasks for today!"
-                                    type="text"
-                                    className="userPage-tasks__item-input"
-                                    disabled
-                                />
-                            </label>
-
-                    }
+                <div className="userPage__actions">
+                    <div className="userPage__actions-item" onClick={addNewTask}>
+                        {addTaskIco}
+                    </div>
+                    <div className="userPage__actions-item" onClick={clearTasks}>
+                        {deleteTaskIco}
+                    </div>
                 </div>
-                <div className="userPage-tasks__newTask" onClick={addNewTask}>
-                    {addTaskIco}
+                <div className="userPage-tasks">
+                    <div className="userPage-tasks-inner">
+                        {
+                            userData.data?.length > 0 ? userData.data.map(
+                                (item, index) =>
+                                    <TaskItem
+                                        key={index}
+                                        index={index}
+                                        task={item.task}
+                                    />
+                            ) :
+                                <label className="userPage-tasks-inner__item">
+                                    <input
+                                        placeholder="No Tasks for today!"
+                                        type="text"
+                                        className="userPage-tasks-inner__item-input"
+                                        disabled
+                                    />
+                                </label>
+
+                        }
+                    </div>
                 </div>
             </div>
         </div>

@@ -84,7 +84,6 @@ router.patch('/saveuser',
         try {
             const {email, data} = req.body;
             const candidate = await User.findOne({email})
-
             if (!candidate) {
                 return res.status(400).json({msg: "User not found, while saving data"})
             }
@@ -95,7 +94,6 @@ router.patch('/saveuser',
         } catch (e) {
             res.status(500).json({msg: "Error while saving data...."})
         }
-
     }
 )
 

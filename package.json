@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "heroku-postbuild": "cd my-app && npm install && npm install --only=dev --no-shrinkwrap && npm run build",
     "start": "node server.js",
     "server": "nodemon server.js",
     "client": "npm run start --prefix my-app",
@@ -15,6 +16,7 @@
     "nodemon": "^2.0.7"
   },
   "dependencies": {
+    "@types/sweetalert": "^2.0.4",
     "bcryptjs": "^2.4.3",
     "concurrently": "^6.0.0",
     "dotenv": "^8.2.0",

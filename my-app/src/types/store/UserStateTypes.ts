@@ -10,12 +10,22 @@ export enum UserStateActionsTypes {
     ADD_NEW_USER_DATA = "ADD_NEW_USER_DATA",
     ADD_NEW_TODO = "ADD_NEW_TODO",
     CHANGE_TODO = "CHANGE_TODO",
-    DELETE_TODO = "DELETE_TODO"
+    DELETE_TODO = "DELETE_TODO",
+    DELETE_ALL = "DELETE_ALL",
+    INITIALIZE = "INITIALIZE"
 }
 
 interface AddNewUserDataAction {
     type: UserStateActionsTypes.ADD_NEW_USER_DATA,
     payload: object
+}
+
+interface InitializeAction {
+    type: UserStateActionsTypes.INITIALIZE
+}
+
+interface ClearTasks {
+    type: UserStateActionsTypes.DELETE_ALL
 }
 
 interface AddNewTodoAction {
@@ -40,4 +50,4 @@ interface DeleteTodoAction {
     }
 }
 
-export type UserStateAction = AddNewTodoAction | AddNewUserDataAction | ChangeTodoAction | DeleteTodoAction
+export type UserStateAction = InitializeAction | ClearTasks | AddNewTodoAction | AddNewUserDataAction | ChangeTodoAction | DeleteTodoAction

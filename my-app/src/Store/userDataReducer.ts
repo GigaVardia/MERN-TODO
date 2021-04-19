@@ -14,12 +14,17 @@ export const userDataReducer = (state = defaultState, action: UserStateAction) =
             return {...state, ...action.payload}
         case UserStateActionsTypes.ADD_NEW_TODO:
             return {...state, data: [...state.data, action.payload]}
+        case UserStateActionsTypes.DELETE_ALL:
+            return {...state, data: []}
         case UserStateActionsTypes.CHANGE_TODO:
             let newChangedData = [...state.data];
             newChangedData[action.payload.index] = {task: action.payload.task}
             return {...state, data: newChangedData}
         case UserStateActionsTypes.DELETE_TODO:
             return {...state, data: state.data.filter((item, index) => index !== action.payload.index)}
+        case UserStateActionsTypes.INITIALIZE:
+            state=defaultState
+            return state
         default:
                 return {...state}
     }

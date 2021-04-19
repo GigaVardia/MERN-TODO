@@ -1,13 +1,16 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {useDispatch} from "react-redux";
 import {useHttp} from "../Hooks/http.hook";
 import {useTypedSelector} from "../Hooks/useTypedSelector";
+import { useAlert } from './../Hooks/useAlert';
 
 const SignIn:FC = () => {
+    const [isMounted, setIsMount] = useState(false)
     const {request} = useHttp();
     const dispatch = useDispatch();
     const loginState = useTypedSelector(state => state.userLogin)
     const {loginFailed} = useTypedSelector(state => state.mainPageInfo)
+    const SweetAlert = useAlert()
 
     const handleEmailInput = (event: React.ChangeEvent<HTMLInputElement>) => {
         dispatch({type: "ADD_EMAIL", payload: event.target.value})
@@ -25,9 +28,6 @@ const SignIn:FC = () => {
             return -1
         }
 
-        console.log(loginState)
-        console.log(loginFailed)
-
         try {
             const data = await request('/api/auth/login', 'POST', {...loginState});
             const user = {
@@ -37,10 +37,13 @@ const SignIn:FC = () => {
                 data: data.payload.data,
                 id: data.payload._id
             }
-            dispatch({type: "ADD_NEW_USER_DATA", payload: {user}})
+            dispatch({type: "ADD_NEW_USER_DATA", payload: user})
             dispatch({type: "SET_USER_LOGIN", payload: true})
             dispatch({type: "SET_LOGIN_FAILED", payload: false})
         } catch (e) {
+            SweetAlert.fire({
+                title: <p>Incorrect Email or Password!</p>
+            })
             dispatch({type: "SET_LOGIN_FAILED", payload: true})
             console.log(e, "Error while login fetch...")
         }
@@ -52,11 +55,15 @@ const SignIn:FC = () => {
     }
 
     useEffect(() => {
-        if (loginFailed) {
+        setIsMount(true)
+
+        if (isMounted && loginFailed) {
             document.querySelectorAll('.signIn-form-label-input')
                 .forEach(item => item.classList.toggle('signIn-form-label-input--failed'));
         }
-    }, [loginFailed])
+
+        return () => setIsMount(false)
+    }, [loginFailed, isMounted])
 
     return (
         <div className="signIn signIn-outer">
